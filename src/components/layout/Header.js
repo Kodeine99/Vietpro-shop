@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -26,9 +27,9 @@ export default function Header() {
             </form>
           </div>
           <div id="cart" className="col-lg-3 col-md-3 col-sm-12">
-            <a className="mt-4 mr-2" href="#">
+            <Link to="/cart" className="mt-4 mr-2" href="#Cart">
               giỏ hàng
-            </a>
+            </Link>
             <span className="mt-3">8</span>
           </div>
         </div>

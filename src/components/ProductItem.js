@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import {Link} from "react-router-dom";
 import slug from "slug";
 
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default function ({ product }) {
   const urlSlug = slug(product.name, { lower: true });
   return (

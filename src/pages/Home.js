@@ -13,7 +13,7 @@ export default function Home() {
         limit: 6,
       }
     }).then(function (res) {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data?.data?.docs) {
         setNewProducts(res.data.data.docs);
       }
@@ -25,7 +25,7 @@ export default function Home() {
         "fillter[is_feature]=true": true,
       }
     }).then(function (res) {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data?.data?.docs) {
         setFeatureProducts(res.data.data.docs);
       }
