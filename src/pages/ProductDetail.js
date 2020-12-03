@@ -32,8 +32,7 @@ export default function ProductDetail(props) {
         setComments(res.data.data.docs); //set lai du lieu cho comments
       }
     });
-  }, [id]);
-// Truyen dependency vao de khi id thay doi se render lai data.
+  }, [id]); // Truyen dependency vao de khi id thay doi se render lai data.
   
   function onSubmitCreateComment(e) {
     e.preventDefault(); // Xoa bo trang thai mac dinh reload cua submit

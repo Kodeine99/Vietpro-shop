@@ -17,7 +17,7 @@ export const getCommentByProductId = (id, config) => {
   return axios.get(`/products/${id}/comments`, config);
 }
 
-// post comments len server
+// post comments to server
 export const createCommentByProductId = (id, data, config) => {
   return axios.post(`/products/${id}/comments`, data, config);
 }
