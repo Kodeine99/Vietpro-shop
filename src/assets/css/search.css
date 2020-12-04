@@ -20,3 +20,7 @@
 	background:#EB1F27;
 	border-color:#dee2e6;
 	color:#FFF;}		
+#pagination ul li.disabled {
+	pointer-events: none;
+	opacity: .6;
+}

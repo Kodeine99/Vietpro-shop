@@ -90,7 +90,7 @@ export default function ProductDetail(props) {
       </div>
       <div id="product-body" className="row">
         <div className="col-lg-12 col-md-12 col-sm-12">
-          <h3>Đánh giá về iPhone X 64GB</h3>
+          <h3>Đánh giá về { product?.name }</h3>
            <div dangerouslySetInnerHTML={{ __html: product?.details}}></div>
         </div>
       </div>
@@ -132,7 +132,6 @@ export default function ProductDetail(props) {
                 required
                 row="8"
                 className="form-control"
-                defaultValue={""}
               >
               </textarea>
             </div>
