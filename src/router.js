@@ -30,8 +30,9 @@ export default function Router() {
               <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/404" exact component={NotFound} />
-                <Route path="/cat-:slug.:id" exact component={Category} />
                 <Route path="/p-:slug.:id" exact component={ProductDetail} />
+                {/* <Route path="/cat-:slug.:id" exact component={Category} /> */}
+                <Route path="/category" exact component={Category} />
                 <Route path="/cart" exact component={Cart} />
                 <Route path="/order-success" exact component={OrderSuccess} />
                 <Route path="/search" exact component={Search} />

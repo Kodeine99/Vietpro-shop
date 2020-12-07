@@ -19,6 +19,7 @@ export default function Search(props) {
   const search = queryString.parse(props.location.search);
   const key = search.key;
   const page = search.page;
+  console.log(search)
 
 
   React.useEffect(() => {
@@ -44,7 +45,7 @@ export default function Search(props) {
     <>
       <div className="products">
         {key ? (
-           <div id="search-result">
+          <div id="search-result">
             Kết quả tìm kiếm với sản phẩm <span>{key}</span>
          </div>
         ) : null}
