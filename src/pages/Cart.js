@@ -1,7 +1,67 @@
 import React from "react";
-import '../assets/css/cart.css';
+import { useSelector, useDispatch } from "react-redux";
+import { order } from "../services/Api";
 
-export default function Cart() {
+export default function Cart({history}) {
+  const dispatch = useDispatch();
+
+  const [customer, setCustomer] = React.useReducer(
+    (newState, prevState) => ({
+      ...prevState,
+      ...newState,
+    }),
+    {}
+  )
+
+  const cart = useSelector((state) => state.cart.items);
+  const totalPrice = cart.reduce((price, item) => price + item.qty * item.price, 0);
+  
+  const onChangeInput = (e, id) => {
+    let value = parseInt(e.target.value);
+    if (isNaN(value)) {
+      value = 1;
+    }
+
+    dispatch({
+      type: "UPDATE_CART_ITEM",
+      payload: {
+        id: id,
+        qty: value,
+      },
+    });
+  };
+
+  const onDeleteItem = (e, id) => {
+    e.preventDefault();
+    //eslint-disable-next-line no-restricted-globals
+    const isDeleted = confirm('Ban muon xoa san pham nay ?');
+    if (isDeleted) {
+      dispatch({
+        type: 'DELETE_CART_ITEM',
+        payload: id,
+      });
+    }
+  }
+  const onChangeInputCustomer = (e) => {
+    const { value, name } = e.target;
+    setCustomer({ [name]: value });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    order({
+      ...customer,
+      items: cart.map((i) => ({ prd_id: i.id, qty: i.qty })),
+    }).then((res) => {
+      console.log(res);
+      dispatch({
+        type: 'RESET_CART',
+      });
+      history.push("/order-success")
+    });
+  };
+  
+
   return (
     <>
       {/* Cart */}
@@ -18,99 +78,44 @@ export default function Cart() {
           </div>
         </div>
         <form method="post">
-          <div className="cart-item row">
-            <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-              <img src="images/product-1.png" alt="" />
-              <h4>Iphone XS Max 2 Sim - 256GB Gold</h4>
-            </div>
-            <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-              <input
-                type="number" id="quantity"
-                className="form-control form-blue quantity"
-                value="1"
-                min="1"
-              >
-              </input>
-            </div>
-            <div className="cart-price">
-              <b>32.990.000đ</b>
-              <a href="#1">Xóa</a>
-            </div>
-          </div>
-          <div className="cart-item row">
-            <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-              <img src="images/product-2.png" alt="" />
-              <h4>Iphone XS Max 2 Sim - 256GB Gold</h4>
-            </div>
-            <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-              <input
-                type="number" id="quantity"
-                className="form-control form-blue quantity"
-                value="1"
-                min="1"
-              >
-              </input>
-            </div>
-            <div className="cart-price">
-              <b>32.990.000đ</b>
-              <a href="#1">Xóa</a>
-            </div>
-          </div>
-          <div className="cart-item row">
-            <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-              <img src="images/product-3.png" alt="" />
-              <h4>Iphone XS Max 2 Sim - 256GB Gold</h4>
-            </div>
-            <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-              <input
-                type="number" id="quantity"
-                className="form-control form-blue quantity"
-                value="1"
-                min="1"
-              >
-              </input>
-            </div>
-            <div className="cart-price">
-              <b>32.990.000đ</b>
-              <a href="#1">Xóa</a>
-            </div>
-          </div>
-          <div className="cart-item row">
-            <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-              <img src="images/product-4.png" alt="" />
-              <h4>Iphone XS Max 2 Sim - 256GB Gold</h4>
-            </div>
-            <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-              <input
-                type="number" id="quantity"
-                className="form-control form-blue quantity"
-                value="1"
-                min="1"
-              >
-              </input>
-            </div>
-            <div className="cart-price">
-              <b>32.990.000đ</b>
-              <a href="#1">Xóa</a>
-            </div>
-          </div>
-          <div className="cart-item row">
-            <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
-              <img src="images/product-5.png" alt="" />
-              <h4>Iphone XS Max 2 Sim - 256GB Gold</h4>
-            </div>
-            <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
-              <input
-                type="number" id="quantity"
-                className="form-control form-blue quantity"
-                value="1"
-                min="1"
-              >
-              </input>
-            </div>
-            <div className="cart-price">
-              <b>32.990.000đ</b>
-              <a href="#1">Xóa</a>
+          {
+            cart.map((item, index) => (
+              <div key={index} className="cart-item row">
+                <div className="cart-thumb col-lg-7 col-md-7 col-sm-12">
+                  <img src={`http://vietpro.online/assets/uploads/${item?.img}`} alt="" />
+                  <h4>{item.name}</h4>
+                </div>
+                <div className="cart-quantity col-lg-2 col-md-2 col-sm-12">
+                  <input
+                    type="number" id="quantity"
+                    className="form-control form-blue quantity"
+                    value={item.qty}
+                    min={1}
+                    onChange={(e) => onChangeInput(e, item.id)}
+                  >
+                  </input>
+                </div>
+                <div className="cart-price">
+                  <b>
+                    {new Intl.NumberFormat('vi', { style: 'currency', currency: 'VND' }).format(item?.price)}
+                  </b>
+                  <a
+                    href="#1"
+                    onClick={(e) => onDeleteItem(e, item.id)}
+                  >
+                    Xóa
+                  </a>
+                </div>
+              </div>
+            ))
+          }
+          <div className="row">
+            <div className="cart-thumb col-lg-7 col-md-7 col-sm-12"></div> 
+            <div className="cart-total col-lg-2 col-md-2 col-sm-12"><b>Tổng cộng:</b></div> 
+            <div className="cart-price col-lg-3 col-md-3 col-sm-12">
+              <b>
+                {new Intl.NumberFormat('vi', { style: 'currency', currency: 'VND' }).format(totalPrice)}
+              </b>
             </div>
           </div>
         </form>
@@ -118,11 +123,13 @@ export default function Cart() {
       {/* End Cart */}
       
       {/* Customer info */}
-      <div id="customer">
-        <form method="post">
+      {(cart.length && (
+        <div id="customer">
+        <form method="post" onSubmit={onSubmit}>
           <div className="row">
             <div id="customer-name" className="col-lg-4 col-md-4 col-sm-12">
-              <input
+                <input
+                onChange={onChangeInputCustomer}
                 placeholder="Họ và tên (bắt buộc)"
                 type="text"
                 name="name"
@@ -133,6 +140,7 @@ export default function Cart() {
             </div>
             <div id="customer-phone" className="col-lg-4 col-md-4 col-sm-12">
               <input
+                onChange={onChangeInputCustomer}
                 placeholder="Số điện thoại (bắt buộc)"
                 type="text"
                 name="phone"
@@ -143,6 +151,7 @@ export default function Cart() {
             </div>
             <div id="customer-mail" className="col-lg-4 col-md-4 col-sm-12">
               <input
+                onChange={onChangeInputCustomer}
                 placeholder="Email (bắt buộc)"
                 type="email"
                 name="email"
@@ -153,6 +162,7 @@ export default function Cart() {
             </div>
             <div id="customer-add" className="col-lg-12 col-md-12 col-sm-12">
               <input
+                onChange={onChangeInputCustomer}
                 placeholder="Địa chỉ nhà riêng hoặc cơ quan (bắt buộc)"
                 type="text"
                 name="add"
@@ -161,23 +171,18 @@ export default function Cart() {
               >
               </input>
             </div>
+            </div>
+          <div className="row">
+            <div className="buy-now col-lg-6 col-md-6 col-sm-12">
+              <button className="btn btn-primary">
+                <b>Mua ngay</b>
+                <span>Giao hàng tận nơi siêu tốc</span>
+              </button>
+            </div>
           </div>
         </form>
-        <div className="row">
-          <div className="buy-now col-lg-6 col-md-6 col-sm-12">
-            <a href="#buy-now">
-              <b>Mua ngay</b>
-              <span>Giao hàng tận nơi siêu tốc</span>
-            </a>
-          </div>
-          <div className="buy-now col-lg-6 col-md-6 col-sm-12">
-            <a href="#buy-now">
-              <b>Trả góp Online</b>
-              <span>Vui lòng call (+84) 0988 550 553</span>
-            </a>
-          </div>
-        </div>
       </div>
+      )) || null}
       {/* End -Customer info */}
     </>
   )

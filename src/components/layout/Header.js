@@ -1,12 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom"; //hook nay chi hoat dong voi nhung component nam trong BrowserRouter.
+import { useSelector } from "react-redux";
+
 
 
 export default function Header() {
 
   const history = useHistory();
   // console.log(history);
+  const { items } = useSelector((state) => state.cart);
+
 
   function onSubmit(e) {
     e.preventDefault();
@@ -25,9 +29,9 @@ export default function Header() {
         <div className="row">
           <div id="logo" className="col-lg-3 col-md-3 col-sm-12">
             <h1>
-              <a href="#">
-                <img className="img-fluid" src="images/logo.png" />
-              </a>
+              <Link to="/">
+                <img className="img-fluid" src="images/logo.png" alt="logo"/>
+              </Link>
             </h1>
           </div>
           <div id="search" className="col-lg-6 col-md-6 col-sm-12">
@@ -49,7 +53,7 @@ export default function Header() {
             <Link to="/cart" className="mt-4 mr-2" href="#Cart">
               Giỏ hàng
             </Link>
-            <span className="mt-3">8</span>
+            <span className="mt-3">{items.reduce((acc, item) => acc + item.qty, 0)}</span>
           </div>
         </div>
       </div>

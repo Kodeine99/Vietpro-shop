@@ -21,3 +21,16 @@ export const getCommentByProductId = (id, config) => {
 export const createCommentByProductId = (id, data, config) => {
   return axios.post(`/products/${id}/comments`, data, config);
 }
+
+//category
+export const getCategories = (config) => {
+  return axios.get("/categories", config);
+}
+export const getCategory = (id, config) => {
+  return axios.get(`/categories/${id}`, config);
+}
+
+// order-Customer
+export const order = (data, config) => {
+  return axios.post("/order", data, config);
+}

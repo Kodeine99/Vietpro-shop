@@ -1,6 +1,8 @@
 import React from "react";
 import '../assets/css/product.css';
 import { getProduct, getCommentByProductId, createCommentByProductId } from "../services/Api"; 
+import { useDispatch } from 'react-redux'
+
 
 export default function ProductDetail(props) {
   // console.log(props);
@@ -11,6 +13,9 @@ export default function ProductDetail(props) {
     email: "",
     name: "",
   });
+
+  const [qty, setQty] = React.useState(1);
+  const dispatch = useDispatch();
 
   const id = props?.match?.params?.id;
   // console.log(id);
@@ -56,7 +61,28 @@ export default function ProductDetail(props) {
     const { name, value } = e.target;
     setInput({...input, [name]: value});
   } 
+
+  function onChangeQuantity(e) {
+    const value = e.target.value;
+    setQty(parseInt(value));
+  }
   
+  function onAddToCart(e) {
+    e.preventDefault();
+
+    dispatch({
+      type: 'ADD_TO_CART',
+      payload: {
+        id: product._id,
+        qty: qty,
+        name: product.name,
+        price: product.price,
+        img: product.image,
+      }
+    });
+    setQty(1);
+  }
+
   return (
     <div id="product">
       <div id="product-head" className="row">
@@ -84,7 +110,26 @@ export default function ProductDetail(props) {
             </li>
           </ul>
           <div id="add-cart">
-            <a href="#a">Mua ngay</a>
+            {
+              product?.is_stock ? (
+                <form onSubmit={ onAddToCart } className="form-inline">
+                  <input
+                    type="number"
+                    min={1}
+                    className="form-control mb-2"
+                    id="inputPassword2"
+                    placeholder="số lượng"
+                    onChange = {onChangeQuantity}
+                  />
+                  <button
+                    type="submit"
+                    className="btn btn-danger mb-2 ml-2"
+                  >
+                    Add to Cart
+                  </button>
+                </form>
+              ) : null  
+            }
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./assets/css/bootstrap.min.css";
 import "./assets/css/home.css";
 import "./assets/css/search.css";
+import './assets/css/cart.css';
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 

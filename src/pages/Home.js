@@ -1,4 +1,6 @@
 import React from "react";
+import {useSelector} from "react-redux";
+// Components
 import ProductList from "../components/ProductList";
 import { getProducts } from "../services/Api";
 
@@ -22,7 +24,7 @@ export default function Home() {
     getProducts({
       params: {
         limit: 6,
-        "fillter[is_feature]=true": true,
+        "filter[is_featured]=true": true,
       }
     }).then(function (res) {
       // console.log(res.data);

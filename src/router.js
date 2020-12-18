@@ -17,13 +17,27 @@ import Menu from "./components/layout/Menu";
 import Slider from "./components/layout/Slider";
 import SideBar from "./components/layout/SideBar";
 
+// Services
+import { getCategories } from "./services/Api";
+
 export default function Router() {
+
+  const [menu, setMenu] = React.useState([]);
+  React.useEffect(() => {
+    getCategories().then((res) => {
+      if (res?.data?.data?.docs) {
+        setMenu(res.data.data.docs);
+      }
+    });
+  }, [])
+
+
   return (
     <BrowserRouter>
       <Header />
       <div id="body">
         <div className="container">
-          <Menu />
+          <Menu data={menu} />
           <div className="row">
             <div id="main" className="col-lg-8 col-md-12 col-sm-12">
               <Slider />
@@ -31,8 +45,7 @@ export default function Router() {
                 <Route path="/" exact component={Home} />
                 <Route path="/404" exact component={NotFound} />
                 <Route path="/p-:slug.:id" exact component={ProductDetail} />
-                {/* <Route path="/cat-:slug.:id" exact component={Category} /> */}
-                <Route path="/category" exact component={Category} />
+                <Route path="/cat-:slug.:id" exact component={Category} />
                 <Route path="/cart" exact component={Cart} />
                 <Route path="/order-success" exact component={OrderSuccess} />
                 <Route path="/search" exact component={Search} />
